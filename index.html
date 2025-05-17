@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shokoladnica Table Reservation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <img src="{{ url_for('static', filename='images/decor/hall3-horiz.jpg') }}" alt="Top View" class="header-img">
+    <h1>Welcome to Shokoladnica!:3</h1>
+    <a href="/about">A tiny part of the menu of our lovely Café...=D </a>
+
+    <p class="info-text">
+        For reservations of <strong>more than 8 guests</strong>, please call us directly at <strong>+38669728781</strong>.
+    </p>
+
+    <form id="booking-form">
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" placeholder="John Doe" required>
+
+        <label for="date">Select Date:</label>
+        <input type="date" id="date" required>
+
+        <label for="time">Select Time:</label>
+        <select id="time" required></select>
+
+        <label for="guests">Number of Guests (1-8):</label>
+        <input type="number" id="guests" placeholder="e.g. 4" min="1" max="8" required>
+
+        <button type="submit">Book Table</button>
+    </form>
+
+    <p id="status"></p>
+    <p id="selected-table"></p> <!-- 👈 ОБЯЗАТЕЛЕН для показа выбранного стола -->
+
+    <!-- Interactive Table Map -->
+    <div id="table-map">
+        <h2>Choose your table:>></h2>
+        <div id="tables"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <img src="{{ url_for('static', filename='images/decor/hall4-horiz.jpg') }}" alt="Bottom View" class="footer-img">
+</body>
+</html>
+
+

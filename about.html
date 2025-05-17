@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<img src="{{ url_for('static', filename='images/decor/hall3-horiz.jpg') }}" alt="Top View" class="header-img">
+<head>
+    <meta charset="UTF-8">
+    <title>About Shokoladnica</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .carousel {
+            position: relative;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+        .carousel img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .carousel-caption {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .carousel-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .carousel-controls button {
+            padding: 6px 14px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Shokoladnica!</h1>
+    <p>Discover our handmade desserts, warm coffee and cozy atmosphere.</p>
+
+    <h2>Mini Menu<3</h2>
+
+    <div class="carousel">
+        <img id="dish-image" src="{{ url_for('static', filename='images/menu/dish1.png') }}" alt="Dish">
+        <div class="carousel-caption" id="dish-name">"Lazy dumplings with caramel persimmon and jam"</div>
+        <div class="carousel-controls">
+            <button onclick="prevDish()">← Previous</button>
+            <button onclick="nextDish()">Next →</button>
+        </div>
+    </div>
+
+    <a href="/">← Back to Reservation</a>
+
+    <script>
+        const dishNames = [
+            "Lazy dumplings with caramel persimmon and jam",
+            "Fresh roll with shrimps and vegetables in rice dough with sweet and spicy sauce and cilantro ",
+            "Appetizer with herring and warm new potatoes",
+            "Large platter of farmhouse craft cheeses with cherry confit and pear chutney",
+            "Pepperoni Pizza",
+            "Focaccia with pesto sauce, with cheese, with rosemary (optional)",
+            "Farmer's (ham, processed smoked cheese, pesto sauce and sun-dried tomatoes)",
+            "Warm salad with baked vegetables and mushrooms, Adyghe cheese, mixed salad and corn",
+            "Very tasty ice cream (bourbon vanilla, Belgian chocolate, strawberry, pistachio)",
+            "Apple and sorrel sorbet, tiramisu cream, marinated sweet apples and Swiss meringue",
+            "Rich goulash soup with beef and vegetables"
+        ];
+        let currentDish = 0;
+
+        function updateDish() {
+            const img = document.getElementById('dish-image');
+            const name = document.getElementById('dish-name');
+            img.src = `/static/images/menu/dish${currentDish + 1}.png`;
+            name.textContent = dishNames[currentDish];
+        }
+
+        function nextDish() {
+            currentDish = (currentDish + 1) % dishNames.length;
+            updateDish();
+        }
+
+        function prevDish() {
+            currentDish = (currentDish - 1 + dishNames.length) % dishNames.length;
+            updateDish();
+        }
+    </script>
+<img src="{{ url_for('static', filename='images/decor/hall4-horiz.jpg') }}" alt="Bottom View" class="footer-img">
+</body>
+</html>
