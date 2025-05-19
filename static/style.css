@@ -82,7 +82,7 @@ input, select, button {
 
 .table.size-8 {
     background-color: #e1d6f0;
-    width: 120px;
+    width: 100px;
     height: 70px;
     border-radius: 35% / 50%;
     color: #503c69;
@@ -236,3 +236,31 @@ body::after {
   }
 }
 
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+  }
+
+  .table {
+    background-color: #3e3e3e;
+    color: #ffffff;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+  }
+
+  .table.selected {
+    background-color: #7dcdbd;
+    color: #000;
+  }
+
+  .info-text {
+    background-color: #2a2a2a;
+    color: #dddddd;
+    border-color: #555;
+  }
+
+  button {
+    background-color: #2e8b57;
+    color: #fff;
+  }
+}
