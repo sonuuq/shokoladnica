@@ -199,3 +199,35 @@ body::after {
     margin-bottom: 35px;
 }
 
+/* 🔧 Адаптивная стилизация столиков на мобильных устройствах */
+@media (max-width: 768px) {
+    #tables {
+        grid-template-columns: repeat(2, 1fr); /* Уменьшаем количество столбцов */
+        gap: 10px;
+    }
+
+    .table {
+        width: 80px;
+        height: 80px;
+        font-size: 12px;
+    }
+
+    .table[data-capacity="8"] {
+        width: 90px;
+        height: 90px;
+        font-size: 11px;
+    }
+
+    .table[data-capacity="6"] {
+        width: 85px;
+        height: 85px;
+        font-size: 11px;
+    }
+
+    .table[data-capacity="2"],
+    .table[data-capacity="4"] {
+        width: 70px;
+        height: 70px;
+        font-size: 12px;
+    }
+}
