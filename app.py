@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import json
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 BOOKINGS_FILE = 'bookings.json'
@@ -55,10 +56,10 @@ def book_table():
     save_bookings(bookings)
     return jsonify({'message': 'Booking successful!'}), 200
 
+# Универсальный запуск для всех сред
 if __name__ == '__main__':
-    app.run(debug=True)
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    port = int(os.environ.get('PORT', 5001))  # Для Render
+    app.run(host='0.0.0.0', port=port, debug=port == 5000)  # Debug только локально
 
 
 
