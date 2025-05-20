@@ -1,20 +1,38 @@
 <!DOCTYPE html>
-<html>
-<head><title>Admin Panel</title></head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="/static/auth.css">
+</head>
 <body>
-  <h2>All Reservations</h2>
-  <table border="1">
-    <tr><th>Name</th><th>Date</th><th>Time</th><th>Guests</th><th>Table</th></tr>
-    {% for b in bookings %}
-      <tr>
-        <td>{{ b.name }}</td>
-        <td>{{ b.date }}</td>
-        <td>{{ b.time }}</td>
-        <td>{{ b.guests }}</td>
-        <td>{{ b.table }}</td>
-      </tr>
-    {% endfor %}
-  </table>
-  <a href="/logout">Logout</a>
+    <div class="container">
+        <h2>All Reservations</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Guests</th>
+                    <th>Table</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in bookings %}
+                <tr>
+                    <td>{{ b.name }}</td>
+                    <td>{{ b.date }}</td>
+                    <td>{{ b.time }}</td>
+                    <td>{{ b.guests }}</td>
+                    <td>{{ b.table }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <a href="/logout"><button class="btn">Logout</button></a>
+    </div>
 </body>
 </html>
+

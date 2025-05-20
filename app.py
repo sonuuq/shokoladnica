@@ -40,10 +40,19 @@ if not os.path.exists(USERS_FILE):
 bookings = load_bookings()
 
 @app.route('/')
-def index():
+def home():
+    if 'user' in session:
+        if session['user'] == 'admin@shoko.com':
+            return redirect('/admin')
+        return redirect('/booking')
+    return render_template('welcome.html')  # новая страница выбора
+
+@app.route('/booking')
+def booking():
     if 'user' not in session:
         return redirect('/login')
     return render_template('index.html', user=session['user'])
+
 
 @app.route('/about')
 def about():
