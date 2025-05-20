@@ -1,10 +1,14 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, session, url_for
 import json
 from datetime import datetime
 import os
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
+app.secret_key = 'super_secret_key'  # нужен для session
+
 BOOKINGS_FILE = 'bookings.json'
+USERS_FILE = 'users.json'
 
 def load_bookings():
     try:
@@ -17,11 +21,29 @@ def save_bookings(data):
     with open(BOOKINGS_FILE, 'w') as f:
         json.dump(data, f, indent=2)
 
+def load_users():
+    try:
+        with open(USERS_FILE, 'r') as f:
+            return json.load(f)
+    except:
+        return {}
+
+def save_users(users):
+    with open(USERS_FILE, 'w') as f:
+        json.dump(users, f, indent=2)
+
+# создаём users.json если нет
+if not os.path.exists(USERS_FILE):
+    with open(USERS_FILE, 'w') as f:
+        json.dump({}, f)
+
 bookings = load_bookings()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    if 'user' not in session:
+        return redirect('/login')
+    return render_template('index.html', user=session['user'])
 
 @app.route('/about')
 def about():
@@ -29,6 +51,8 @@ def about():
 
 @app.route('/confirmation')
 def confirmation():
+    if 'user' not in session:
+        return redirect('/login')
     name = request.args.get('name')
     date = request.args.get('date')
     time = request.args.get('time')
@@ -38,6 +62,9 @@ def confirmation():
 
 @app.route('/book_table', methods=['POST'])
 def book_table():
+    if 'user' not in session:
+        return jsonify({'message': 'Not logged in'}), 401
+
     global bookings
     booking_data = request.get_json()
     requested_table = booking_data['table']
@@ -56,10 +83,53 @@ def book_table():
     save_bookings(bookings)
     return jsonify({'message': 'Booking successful!'}), 200
 
-# Универсальный запуск для всех сред
+# ===== REGISTRATION =====
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        users = load_users()
+        email = request.form['email']
+        password = request.form['password']
+        if email in users:
+            return render_template('register.html', error="User already exists.")
+        users[email] = generate_password_hash(password)
+        save_users(users)
+        return redirect('/login')
+    return render_template('register.html')
+
+# ===== LOGIN =====
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        users = load_users()
+        email = request.form['email']
+        password = request.form['password']
+        if email in users and check_password_hash(users[email], password):
+            session['user'] = email
+            if email == 'admin@shoko.com':
+                return redirect('/admin')
+            return redirect('/')
+        return render_template('login.html', error="Invalid email or password.")
+    return render_template('login.html')
+
+# ===== LOGOUT =====
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/login')
+
+# ===== ADMIN PANEL =====
+@app.route('/admin')
+def admin():
+    if session.get('user') != 'admin@shoko.com':
+        return "Access denied", 403
+    return render_template('admin.html', bookings=bookings)
+
+# ===== RUN =====
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5001))  # Для Render
-    app.run(host='0.0.0.0', port=port, debug=port == 5000)  # Debug только локально
+    port = int(os.environ.get('PORT', 5001))
+    app.run(host='0.0.0.0', port=port, debug=port == 5000)
+
 
 
 
